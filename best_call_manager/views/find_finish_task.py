@@ -25,25 +25,24 @@ def find_finish_task(request):
             return render(request, 'best_call_manager_temp.html')
 
         app_tasks = get_app_tasks(but, app_tasks_id)
+        possible_calls = but.call_api_method("app.option.get", {"option": "possible_calls"})["result"]
 
-        progress_tasks_id = app_tasks_id if app_tasks_id else []
-        completed_tasks = dict()
+        progress_tasks_id = app_tasks_id if app_tasks_id else []  # задачи которые нужно обработать
+        completed_tasks = dict()  # обработанные задачи
 
         for app_task in app_tasks:
-            if app_task["status"] == '5':
+            if app_task["status"] == '5':  # завершенная задача
                 progress_tasks_id.remove(app_task["id"])
                 completed_tasks[app_task["id"]] = app_task
 
         if not completed_tasks:
             return render(request, 'best_call_manager_temp.html')
 
-        possible_calls = but.call_api_method("app.option.get", {"option": "possible_calls"})["result"]
-
         calls = dict()
         for task_id, task in completed_tasks.items():
             try:
-                task_res = get_task_res(but, task_id)
-            except IndexError:
+                task_res = get_task_res(but, task_id)  # пытаемся получить результат задания
+            except IndexError:  # если результата нет
                 progress_tasks_id.append(task_id)
 
                 but.call_api_method("tasks.task.renew", {"taskId": task_id})
@@ -58,7 +57,7 @@ def find_finish_task(request):
                 continue
 
             if type(possible_calls) is dict and possible_calls.get(task_id):
-                if not (task_res["text"] in possible_calls[task_id]):
+                if not (task_res["text"] in possible_calls[task_id]):  # если результата нет в списке звонков
                     progress_tasks_id.append(task_id)
 
                     but.call_api_method("tasks.task.renew", {"taskId": task_id})

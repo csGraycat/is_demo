@@ -9,10 +9,10 @@ import pandas as pd
 def setting_goals(but, calls):
     """Позволяет поставить задачи по выбору лучшего звонка пользователям."""
 
-    user_dict, user_fields = search_manager(but)
+    user_dict, user_fields, departments_dict = search_manager(but)
     manager_dict = dict()
 
-    for manager_id, user in user_dict.items():
+    for manager_id, user in user_dict.items():  # user_dict = {id: user}; user_dict.items = (id, user)
         if user["SUPERVISORS"] == "":
             manager_dict[manager_id] = manager_id
         else:
@@ -49,7 +49,7 @@ def setting_goals(but, calls):
             calls_for_task.append(row["CALL_ID"])
 
         task_id = add_task(but, group[0], manager_dict[group[0]], table,
-                           parse_date_in_dmy(group[1]))
+                           parse_date_in_dmy(group[1]))  # tasks.task.add
         task_id_list.append(task_id)
 
         possible_calls[task_id] = calls_for_task

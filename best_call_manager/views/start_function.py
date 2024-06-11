@@ -16,16 +16,16 @@ def start_find_all_call(request):
 
     if request.method == "POST":
         but = request.bitrix_user_token
-        now_date = get_now_date()
+        now_date = get_now_date()  # получаем сегодняшнюю дату в iso-формате
         try:
-            app_date = get_app_date(but)
+            app_date = get_app_date(but)  # забираем дату из опций приложения (api.option.get)
 
-            if app_date == now_date:
+            if app_date == now_date:  # случай если сегодня уже загружали
                 return render(request, "best_call_manager_temp.html")
-            else:
+            else:  # если сегодня не загружали - получаем звонки от даты предыдущей загрузки до сегодняшней
                 calls = get_new_calls(but, app_date, now_date)
 
-        except (TypeError, KeyError):
+        except (TypeError, KeyError):  # если никогда не загружали - возвращаем все звонки до сегодняшней даты (не включая)
             calls = get_old_calls(but, now_date)
 
         task_id_list, possible_calls = setting_goals(but, calls)
@@ -36,7 +36,7 @@ def start_find_all_call(request):
         else:
             app_possible_calls = possible_calls
 
-        app_tasks_id = get_app_tasks_id(but)
+        app_tasks_id = but.call_list_method("app.option.get", {"option": "tasks"})
         if app_tasks_id and app_tasks_id[0] != '':
             app_tasks_id.extend(task_id_list)
         else:
