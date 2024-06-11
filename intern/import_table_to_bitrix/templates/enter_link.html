@@ -1,0 +1,20 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Title
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Импорт данных из гугл-таблицы</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+  <label for="link">Введите ссылку</label>
+  <input type="text" name="link" id="link" required />
+<p><input class="input122" type="submit" value="Загрузить данные"></p>
+</form>
+{% endblock %}

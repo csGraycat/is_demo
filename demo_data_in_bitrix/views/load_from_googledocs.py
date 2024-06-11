@@ -23,8 +23,6 @@ def load_from_googledocs(request, link):
     # а нам нужно вместо edit, делать export
     # сделаем преобразование разбиением строки. Может сбойнуть если id документа будет начинаться с edit
     export_link = link.split("/edit")[0] + "/export"
-    # вариант 2
-    export_link = "/".join(link.split("/")[0:-1]) + "/export"
     res = requests.get(export_link)
     filename = os.path.join(settings.BASE_DIR, 'temp.xlsx')
     with open(filename, "wb") as f:

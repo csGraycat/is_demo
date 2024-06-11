@@ -69,8 +69,41 @@
 {% endblock %}
 
 {% block content %}
-    <form class="form122" action="{% url 'product_in_excel' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <p><input class="input122" type="submit" value="Скачать .xlsx файл"></p>
-    </form>
+
+    <form action="{% url 'product_in_excel' %}" method="POST">
+<fieldset>
+  <legend>Выбрать поля для сохранения</legend>
+  <div>
+    <input type="checkbox" id="ID" name="fields" value="ID">
+    <label for="ID">ID</label>
+  </div>
+  <div>
+    <input type="checkbox" id="NAME" name="fields" value="NAME">
+    <label for="NAME">Название</label>
+  </div>
+  <div>
+    <input type="checkbox" id="CODE" name="fields" value="CODE">
+    <label for="CODE">Код товара</label>
+  </div>
+  <div>
+    <input type="checkbox" id="CATALOG_ID" name="fields" value="CATALOG_ID">
+    <label for="CATALOG_ID">ID каталога</label>
+  </div>
+  <div>
+    <input type="checkbox" id="DESCRIPTION" name="fields" value="DESCRIPTION">
+    <label for="DESCRIPTION">Описание</label>
+  </div>
+  <div>
+    <input type="checkbox" id="PRICE" name="fields" value="PRICE">
+    <label for="PRICE">Цена</label>
+  </div>
+  <div>
+    <input type="checkbox" id="CURRENCY_ID" name="fields" value="CURRENCY_ID">
+    <label for="CURRENCY_ID">Валюта</label>
+  </div>
+  <div>
+    <p><input class="input122" type="submit" value="Скачать .xlsx файл"></p>
+  </div>
+  </fieldset>
+</form>
 {% endblock %}

@@ -1,3 +1,5 @@
+import base64
+
 from vendors.tinkoff.python.tinkoff.cloud.stt.v1 import stt_pb2_grpc, stt_pb2
 import grpc
 from vendors.tinkoff.python.auth import authorization_metadata
@@ -25,6 +27,9 @@ class NumberChoicesAddToChat(models.IntegerChoices):
     one = 1, 'Уведомлять'
 
 
+def call_vote_choices():
+    return [(i, i) for i in range(1, 6)]
+
 
 class CallInfo(models.Model):
     user_phone = models.CharField(max_length=20, null=False, blank=False)
@@ -36,6 +41,8 @@ class CallInfo(models.Model):
     duration = models.IntegerField(null=True, blank=True)
     add_to_chat = models.IntegerField(blank=True, null=True,
                                       choices=NumberChoicesAddToChat.choices)
+    vote = models.IntegerField(null=True, blank=True,
+                               choices=call_vote_choices())
     call_id = models.CharField(max_length=255, null=True, blank=True)
 
     inner_media_path = "rings/"
@@ -50,7 +57,6 @@ class CallInfo(models.Model):
             for alternative in result.alternatives:
                 ans_str += alternative.transcript
         return ans_str
-
 
     def telephony_externalcall_register(self, but):
 
@@ -75,7 +81,14 @@ class CallInfo(models.Model):
             "DURATION": self.duration,
             "RECORD_URL": f'https://{settings.APP_SETTINGS.app_domain}/media/{self.inner_media_path}{self.filename}.mp3',
             "ADD_TO_CHAT": self.add_to_chat,
+            "VOTE": self.vote,
         })
+        # self.save()
+        # but.call_api_method('telephony.externalcall.attachrecord', {
+        #     "CALL_ID": self.call_id,
+        #     "FILENAME": f'{self.filename}.mp3',
+        #     "FILE_CONTENT": base64.b64encode(self.file.read())
+        # })
 
     def wav_maker_n_messages(self, but):
         ne_path = os.path.join(settings.BASE_DIR, "media", self.inner_media_path, self.filename).replace(r"\\", "/")

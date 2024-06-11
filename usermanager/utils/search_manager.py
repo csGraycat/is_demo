@@ -1,5 +1,5 @@
 def find_supervisor(departments_dict, current_dep='1', order=0):
-    """Рекурсивая функция, осуществляющая поиск начальника, если в настоящем
+    """Рекурсивная функция, осуществляющая поиск начальника, если в настоящем
     подразделении он не был найден."""
 
     department = departments_dict[current_dep]
@@ -13,6 +13,28 @@ def find_supervisor(departments_dict, current_dep='1', order=0):
         if not parent_exists:
             return "None", order
         return find_supervisor(departments_dict, department['PARENT'], order + 1)
+
+
+def find_closest_supervisor(user_id, user, list_string, departments_dict):
+    for id in user['UF_DEPARTMENT']:
+        dep_id = str(id)
+        list_string.append(dep_id)
+        department = departments_dict[dep_id]
+        if 'UF_HEAD' in department.keys():
+            if department['UF_HEAD'] == user_id:
+                if 'PARENT' in department:
+                    department.update({'CLOSEST_SUPERVISOR': find_supervisor(departments_dict, department['PARENT'], order=1)[0]})
+                else:
+                    department.update({'CLOSEST_SUPERVISOR': ''})
+            else:
+                department.update({'CLOSEST_SUPERVISOR': department['UF_HEAD']})
+        else:
+            if 'PARENT' in department:
+                department.update({'CLOSEST_SUPERVISOR': find_supervisor(departments_dict, department['PARENT'], order=1)[0]})
+            else:
+                department.update({'CLOSEST_SUPERVISOR': ''})
+    user['UF_DEPARTMENT'] = list_string
+    return user, departments_dict
 
 
 def search_manager(but):
@@ -64,7 +86,6 @@ def search_manager(but):
             #  В функцию поиска передается родительское подразделение, если в текущем
             #   юзер является руководителем. В ином случае передается текущее.
 
-
             if supervisor_id != "None":
                 supervisor = user_dict[supervisor_id]
                 conj_str = ""
@@ -88,5 +109,5 @@ def search_manager(but):
                 pass
         conj_str += f"| ID: {user_id}"
         user.update({'FULL_NAME': conj_str})
+    return user_dict, user_fields, departments_dict
 
-    return user_dict, user_fields

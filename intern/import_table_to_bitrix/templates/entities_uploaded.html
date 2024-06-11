@@ -1,34 +1,29 @@
 {% extends "base_app.html" %}
 
 {% block title %}
-    Найдены следующие дубликаты
+    Title
 {% endblock %}
 
 {% block header %}
     <div class="header">
-{#        <h1>Найдены следующие дубликаты:</h1>#}
+       <h1>Импорт данных из гугл-таблицы</h1>
         <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
     </div>
 {% endblock %}
 
 {% block content %}
-    {% if res %}
-    <h1>Найдены следующие дубликаты:</h1>
-    <div>
+<div>
         <table>
           <tr>
             <th>Название</th>
-            <th>Количество дубликатов</th>
+            <th>Количество</th>
           </tr>
-          {% for name, count in res.items %}
+          {% for name, count in object_count.items %}
           <tr>
             <td>{{ name }}</td>
             <td>{{ count }}</td>
           </tr>
           {% endfor %}
         </table>
-    </div>
-    {% else %}
-        <h1>Дубликаты не найдены</h1>
-    {% endif %}
+</div>
 {% endblock %}

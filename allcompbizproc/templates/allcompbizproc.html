@@ -63,7 +63,7 @@
     <div class="form-wrapper">
         <form action="{% url 'run' %}" method="post" class="form">
             {{ form.as_p }}
-            <input type="submit" value="Запустить выбранный БП">
+            <input type="submit" value="Запустить выбранный БП" name="check_str">
         </form>
     </div>
 {% endblock %}

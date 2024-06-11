@@ -4,11 +4,19 @@ from collections import Counter
 
 
 @main_auth(on_cookies=True)
-def find_duplicates(request):
+def find_entity_duplicates(request):
+    """Собирает список дубликатов из сущности, выбранной в select_entity"""
     but = request.bitrix_user_token
-    lst = list()
-    res = but.call_list_method('crm.product.list')
-    for i in res:
-        lst.append(i["NAME"])
-    res = {name: count for name, count in Counter(lst).items() if count > 1}
-    return render(request, 'duplicates.html', context={'res': res})
+    lst = []
+    if request.method == 'POST':
+        selected_entity = request.POST.get('entity')
+        res = but.call_list_method(f'crm.{selected_entity}.list')
+        for i in res:
+            if selected_entity == 'contact':
+                full_name = i['NAME'] + f' {i['SECOND_NAME']}' + f' {i['LAST_NAME']}'
+                lst.append(full_name)
+            else:
+                lst.append(i['TITLE'])
+        res = {name: count for name, count in Counter(lst).items() if count > 1}
+        return render(request, 'duplicates.html', context={'res': res})
+    return render(request, 'select_entity.html')

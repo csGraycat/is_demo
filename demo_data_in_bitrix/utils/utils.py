@@ -23,7 +23,7 @@ def add_origin_prefix(data, prefix):
     В файле ексель(гугл) док мы делаем связку менжду страницами по полю ORIGIN_ID, т.к при импорте в Б24 мы получим новые ID сущностей.
     Эта функая помогает делать уникальные ORIGIN_ID для единовремнного импорта демоданных
     для всех записей добавляет префикс (Мы его возьмем как текущее время с микросекундами)
-    у все хаписей "10" стенет "1690205018.084936_10"
+    у всех записей "10" станет "1690205018.084936_10"
     :param data:
     :param prefix:
     :return:
@@ -38,7 +38,7 @@ def add_origin_prefix(data, prefix):
 def make_links_from_origin(data, excel_field, b24_field, source_map, prefix):
     # Принимает список из листов экселя
     # заменяет excel_field=COMPANY_ORIGIN_ID на b24_field=COMPANY_ID учитывая предыдущую замену при импорте демоданных
-    # для создания правльной адресации на только что созданные сущности
+    # для создания правильной адресации на только что созданные сущности
     for d in data:
         # Добавляем префикс для ORIGIN_ID
         if d.get(excel_field):
@@ -58,17 +58,16 @@ def load_crm(crm_items, but, type_id):
 
 def import_data_from_xls(filename, but):
     # Принимает токен и excel файл с несколькоми страницами и загружает их в Битрикс24
-    # sheet_names = get_sheet_names(filename)
     excel_file = pd.ExcelFile(filename)
+    sheet_names = excel_file.sheet_names
     # для всего пакета загрузки будет одинаковый префикс у ORIGIN_ID
     load_origin_id_prefix = time.time()
-    object_count = {"Лиды": None,
-                    "Сделки": None,
-                    "Контакты": None,
-                    "Компании": None,
-                    "Звонки": None}
+    object_count = {}
+    for sheet in sheet_names:
+        object_count.update({sheet: None})
 
-    if "Загружаем компании":  # Всегда True
+
+    if "Компании" in sheet_names:
         company_data = excel_file.parse('Компании').to_dict("records")
         company_data = add_origin_prefix(company_data, load_origin_id_prefix)
         object_count["Компании"] = len(company_data)
@@ -91,7 +90,7 @@ def import_data_from_xls(filename, but):
                 "ADDRESS_1": d["ADDRESS"],
             }})
 
-    if "Загружаем контакты":
+    if "Контакты" in sheet_names:
         contacts_data = excel_file.parse('Контакты').to_dict("records")
         contacts_data = add_origin_prefix(contacts_data, load_origin_id_prefix)
         contacts_data = make_links_from_origin(contacts_data,
@@ -105,17 +104,17 @@ def import_data_from_xls(filename, but):
         object_count["Контакты"] = len(contacts_data)
         load_crm(contacts_data, but, "3")
 
-    if "Загружаем сделки":
+    if "Сделки" in sheet_names:
         deals_data = excel_file.parse('Сделки').to_dict("records")
         object_count["Сделки"] = len(deals_data)
         load_crm(deals_data, but, "2")
 
-    if "Загружаем лиды":
+    if "Лиды" in sheet_names:
         leads_data = excel_file.parse('Лиды').to_dict("records")
         object_count["Лиды"] = len(leads_data)
         load_crm(leads_data, but, "1")
 
-    if "Загружаем звонки":
+    if "Звонки" in sheet_names:
         calls_data = excel_file.parse('Звонки').to_dict('records')
         object_count["Звонки"] = len(calls_data)
         for c in calls_data:
@@ -133,8 +132,8 @@ def import_data_from_xls(filename, but):
             url = "https://drive.google.com/uc?id=" + drive_id + "&export=download"
             r = requests.get(url, allow_redirects=True)
 
-            file_path = os.path.join(call.inner_media_path, str(call.id) + '.mp3')
-            with open(os.path.join(settings.MEDIA_ROOT, file_path), 'wb') as file:
+            file_path = os.path.join(call.inner_media_path, str(call.id) + '.mp3')  # rings/
+            with open(os.path.join(settings.MEDIA_ROOT, file_path), 'wb') as file:  #
                 file.write(r.content)
 
             call.file.name = file_path
@@ -145,6 +144,12 @@ def import_data_from_xls(filename, but):
             call.wav_maker_n_messages(but)
 
     return object_count
+
+
+
+
+
+
 
 
 def excel_to_dict(file_path, sheet_name):

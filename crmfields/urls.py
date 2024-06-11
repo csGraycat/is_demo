@@ -4,12 +4,14 @@ from crmfields.views.show_lead_fields import show_lead_fields
 from .views.show_contact_fields import show_contact_fields
 from crmfields.views.show_deal_fields import show_deal_fields
 from crmfields.views.show_company_fields import show_company_fields
+from crmfields.views.show_company_fields_st import show_company_fields_st
 from .views.reload import reload_start
 
 urlpatterns = [
     path('show_lead_fields/', show_lead_fields),
     path('show_contact_fields/', show_contact_fields),
     path('show_deal_fields/', show_deal_fields),
-    path('show_company_fields/', show_company_fields, ),
-    path('', reload_start, name='reload_start')
+    path('show_company_fields/', show_company_fields),
+    path('show_company_fields_st/', show_company_fields_st),
+    path('', reload_start, name='reload_start'),
 ]

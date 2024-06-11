@@ -39,22 +39,34 @@
         <tr>
             <th>Полное имя</th>
             <th>Руководители</th>
+            <th>Подразделения</th>
         </tr>
         {% for user_id, user in users.items %}
             <tr>
                 <td>
-                    <a href="https://b24-tyk53v.bitrix24.ru/company/personal/user/{{ user_id }}/" target="_blank">{{ user.FULL_NAME }}</a>
+                    <a href="https://b24-bx51wl.bitrix24.ru/company/personal/user/{{ user_id }}/" target="_blank">{{ user.FULL_NAME }}</a>
                 </td>
                 <td>
                     {% if user.SUPERVISORS|length > 0 %}
                         {% for supervisor in user.SUPERVISORS %}
-                            <a href="https://b24-tyk53v.bitrix24.ru/company/personal/user/{{ supervisor.0 }}/">{{ supervisor.1 }}</a>{% if not forloop.last %}<br><br> {% endif %}
+                            <a href="https://b24-bx51wl.bitrix24.ru/company/personal/user/{{ supervisor.0 }}/">{{ supervisor.1 }}</a>{% if not forloop.last %}<br><br> {% endif %}
                         {% endfor %}
                     {% else %}
                         Нет руководителя
                     {% endif %}
                 </td>
+                <td>
+                    {% for dep_id, dep in departments.items %}
+                        {% if dep.INT_ID in user.UF_DEPARTMENT %}
+                        <p>{{ dep.NAME }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <form method="POST" action="{% url 'employee_list' %}">
+                        <input type="hidden" name="chosen_user_id" value="{{ user_id }}">
+                        <button type="submit">Руководители по отделам</button>
+                    </form>
 
+                </td>
             </tr>
         {% endfor %}
     </table>

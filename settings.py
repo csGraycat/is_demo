@@ -19,6 +19,7 @@ DEBUG = False
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'intern.import_table_to_bitrix',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

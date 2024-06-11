@@ -26,23 +26,19 @@ def users_in_dict(users):
     return users_dict
 
 
-def save_file(products, users):
+def save_file(products, fields):
 
     # Создание нового файла Excel
     workbook = Workbook()
     sheet = workbook.active
-    users_name = users_in_dict(users)
-    date = date_parse(products)
     # Запись данных в ячейки
-    data = [
-        ["ID", "Название", "Код товара", "Дата создания", "Кем изменено", "Кем создано", "ID каталога",
-         "Описание товара", "Цена", "Валюта"],
-    ]
+    data = [fields]
 
     for product in products:
-        data.append([product['ID'], product['NAME'], product['CODE'], date[product['ID']],
-                     users_name[product['MODIFIED_BY']], users_name[product['CREATED_BY']], product['CATALOG_ID'],
-                     product['DESCRIPTION'], product['PRICE'], product['CURRENCY_ID']])
+        product_info = []
+        for field in fields:
+            product_info.append(product[field])
+        data.append(product_info)
 
     for row in data:
         sheet.append(row)
@@ -78,7 +74,6 @@ def save_file(products, users):
                 pass
         adjusted_width = (max_length + 2)
         sheet.column_dimensions[column_letter].width = adjusted_width
-
     # Оптимизированное автоматическое расширение столбцов
     sheet.calculate_dimension()
 

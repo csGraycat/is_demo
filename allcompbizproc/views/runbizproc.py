@@ -10,16 +10,24 @@ from allcompbizproc.models.bizprocmodel import BizprocModel
 
 @main_auth(on_cookies=True)
 def run_bizproc(request):
-    but = request.bitrix_user_token
-    companies_id = but.call_list_method('crm.company.list', {'select': ['ID']})
-    BizprocModel.find_all_bizprocs(but)
+    global selected_entity_bp
     if request.method == 'POST':
+        but = request.bitrix_user_token
+        entity_id = but.call_list_method(f'crm.{selected_entity_bp}.list', {'select': ['ID']})
         form = BPForm(request.POST)
         if form.is_valid():
             cur_bp = form.cleaned_data['bp']
-            for company in companies_id:
-                cur_bp.run_cur_bizproc(but, company['ID'])
+            for entity in entity_id:
+                cur_bp.run_cur_bizproc(but, entity['ID'], selected_entity_bp)
             return HttpResponseRedirect(reverse('reload_start'))
-    else:
-        form = BPForm()
+    return render(request, 'select_entity_bp.html')
+
+
+@main_auth(on_cookies=True)
+def choose_bp(request):
+    global selected_entity_bp
+    selected_entity_bp = request.POST.get('entity')
+    but = request.bitrix_user_token
+    BizprocModel.find_all_bizprocs(but, selected_entity_bp)
+    form = BPForm()
     return render(request, 'allcompbizproc.html', context={'form': form})

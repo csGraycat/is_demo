@@ -14,6 +14,6 @@ def reg_call(request):
             model = form.save()
             model.telephony_externalcall_register(but)
             model.telephony_externalcall_finish(but)
-            model.wav_maker_n_messages(but)
+            # model.wav_maker_n_messages(but)
     form = CallInfoForm()
     return render(request, 'registercall.html', locals())

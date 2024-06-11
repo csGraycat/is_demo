@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Демо приложение</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ chosen_user.FULL_NAME }}</h2>
+    <table>
+        <tr>
+            <th>Подразделение</th>
+            {% for dep in supers.keys %}
+                <td>
+                    {{ dep }}
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Руководитель</th>
+
+            {% for sup in supers.values %}
+                <td>
+                    {{ sup }}
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+<a href="{% url 'employee_list' %}">Назад</a>
+</body>
+</html>

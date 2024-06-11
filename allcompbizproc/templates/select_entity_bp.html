@@ -1,0 +1,24 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Выберите сущность
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+        <h1>Выберите сущность:</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <form method="POST" action="{% url 'choose_bp' %}">
+        <select name="entity">
+            <option value="lead">Лиды</option>
+            <option value="company">Компании</option>
+            <option value="contact">Контакты</option>
+            <option value="deal">Сделки</option>
+        </select>
+        <button type="submit">Найти</button>
+    </form>
+{% endblock %}
