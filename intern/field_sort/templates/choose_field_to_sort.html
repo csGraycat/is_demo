@@ -1,0 +1,21 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Title
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Сортировка списочного поля</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    Введите ссылку на списочное поле сущности "Компания"
+    <form method="POST" action="{% url 'field_sort' %}">
+        <label for="link"></label><input type="text" id="link" name="link">
+        <button type="submit">Отсортировать</button>
+    </form>
+{% endblock %}
