@@ -1,0 +1,23 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Отправка сообщений ботом в Telegram
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Отправка сообщений ботом в Telegram</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    Введите ID чата и токен бота.
+    <form action="{% url "bot_info"%}" method="POST">
+        <p><input type="text" id="chat_id" name="chat_id" required placeholder="ID чата"></p>
+        <p><input type="text" id="bot_token" name="bot_token" required placeholder="Токен бота"></p>
+        <button type="submit">Сохранить бота</button>
+    </form>
+    
+{% endblock %}

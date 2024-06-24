@@ -1,0 +1,19 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Title
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Расшифровка аудио-файла</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <h2>Полученный текст:</h2>
+    {{ transcribed_text_base }}
+    {{ transcribed_text_small }}
+{% endblock %}

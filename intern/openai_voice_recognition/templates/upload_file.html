@@ -1,0 +1,21 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Title
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Расшифровка аудио-файла</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <form action="{% url "open_ai_get_text"%}" method="POST" enctype="multipart/form-data">
+        {{ form }}
+        <button type="submit">Расшифровать</button>
+    </form>
+    
+{% endblock %}

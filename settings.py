@@ -19,6 +19,8 @@ DEBUG = False
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'intern.send_msg_tg_bot',
+    'intern.openai_voice_recognition',
     'intern.field_sort',
     'intern.import_table_to_bitrix',
     'django.contrib.admin',

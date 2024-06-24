@@ -1,0 +1,33 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Отправка сообщений ботом в Telegram
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Отправка сообщений ботом в Telegram</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    Введите сообщение.
+    <form action="{% url "send_msg_tg"%}" method="POST">
+        <p><input type="text" id="msg_text" name="msg_text" required placeholder="Текст сообщения"></p>
+        <input type="hidden" name="chat_id" value="{{ chat_id }}">
+        <input type="hidden" name="bot_token" value="{{ bot_token }}">
+        <button type="submit">Отправить сообщение</button>
+    </form>
+    <form action="{% url "bot_info" %}">
+        <button type="submit">Изменить бота</button>
+    </form>
+    {% if bot_not_found %}
+        Не удалось отправить сообщение. Проверьте правильность написания токена и ID.
+    {% endif %}
+    {% if success %}
+        Сообщение успешно отправлено.
+    {% endif %}
+    
+{% endblock %}
