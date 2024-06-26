@@ -2,6 +2,7 @@
 .idea/
 media/
 local_settings.py
+_local_settings.py
 .venv/
 .venv
 venv/

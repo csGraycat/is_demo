@@ -18,6 +18,13 @@ def get_users(but):
     return users
 
 
+# возвращает все звонки (с файлами и без)
+def get_all_calls(but, first_call_id):
+    filter_dict = {'FILTER': {'>=ID': first_call_id}}
+    calls = but.call_list_method('voximplant.statistic.get', filter_dict)
+    return calls, len(calls)
+
+
 # Возвращает звонки с прикрепленными файлами, соответствующие фильтру.
 def get_calls_with_files(but, first_call_id):
     filter_dict = {'FILTER': {'>=ID': first_call_id}}
@@ -34,7 +41,7 @@ def create_message(call, users):
           f"{start.strftime('%d.%m.%Y %H:%M:%S')}\n" \
           f"Номер {call['PHONE_NUMBER']} \n" \
           f"Менеджер: {get_user_name(users, call['PORTAL_USER_ID'])}\n" \
-          f"{call['CRM_ENTITY_TYPE'].capitalize() if call['CRM_ENTITY_TYPE'] else 'Нет данных'}: "
+          f"{call['CRM_ENTITY_TYPE'].capitalize() if call['CRM_ENTITY_TYPE'] else 'Нет данных'} "
     return msg
 
 

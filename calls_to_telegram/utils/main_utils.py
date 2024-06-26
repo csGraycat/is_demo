@@ -2,7 +2,6 @@ import requests
 import time
 from .secondary_utils import *
 
-
 from integration_utils.vendors.telegram import Bot
 
 
@@ -12,7 +11,7 @@ def keep_call_info_synced(but, bot_token, calls_chat_id):
         try:
             last_call_id = but.call_api_method('app.option.get')['result']['last_call_id']
             first_call_id = str(int(last_call_id) + 2)
-        except TypeError:
+        except KeyError:
             # если вдруг в базе нет последнего id, берем последний звонок
             first_call_id = but.call_list_method('voximplant.statistic.get', {'SORT': 'ID', 'ORDER': 'DESC'}, limit=1)[0]['ID']
         last_call_id = send_calls(but, bot, calls_chat_id, first_call_id)
@@ -25,6 +24,18 @@ def keep_call_info_synced(but, bot_token, calls_chat_id):
         time.sleep(10)
 
 
+def export_all(but, bot_token, calls_chat_id):
+    bot = Bot(token=bot_token)
+    first_call_id = '0'
+
+    last_call_id = send_all(but, bot, calls_chat_id, first_call_id)
+    if last_call_id is not None:
+        but.call_api_method('app.option.set', {'options': {'last_call_id': last_call_id}})
+        return True
+    else:
+        return False
+
+
 def export_calls_to_telegram(but, bot_token, calls_chat_id):
     bot = Bot(token=bot_token)
     first_call_id = '0'
@@ -35,6 +46,25 @@ def export_calls_to_telegram(but, bot_token, calls_chat_id):
         return True
     else:
         return False
+
+
+def send_all(but, bot, calls_chat_id, first_call_id):
+    calls, len_calls = get_all_calls(but, first_call_id)
+    last_call_id = str(len_calls * 2 + int(first_call_id))
+
+    users = get_users(but)
+    msg = ''
+    for call in calls:
+        start = parse(call['CALL_START_DATE'])
+        manager_name = get_user_name(users, call['PORTAL_USER_ID']).split()[0] + ' ' + \
+                       get_user_name(users, call['PORTAL_USER_ID']).split()[1]
+        msg += f"{start.strftime('%d.%m.%Y %H:%M:%S')}\n" \
+               f"Номер: {call['PHONE_NUMBER']} \n" \
+               f"Менеджер: {manager_name}\n" \
+               '--------------------\n'
+    bot.send_message(text=msg, chat_id=calls_chat_id)
+
+    return last_call_id
 
 
 def send_calls(but, bot, calls_chat_id, first_call_id):

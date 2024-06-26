@@ -83,12 +83,11 @@ class CallInfo(models.Model):
             "ADD_TO_CHAT": self.add_to_chat,
             "VOTE": self.vote,
         })
-        # self.save()
-        # but.call_api_method('telephony.externalcall.attachrecord', {
-        #     "CALL_ID": self.call_id,
-        #     "FILENAME": f'{self.filename}.mp3',
-        #     "FILE_CONTENT": base64.b64encode(self.file.read())
-        # })
+        but.call_api_method('telephony.externalCall.attachRecord', {
+            "CALL_ID": self.call_id,
+            "FILENAME": f'{self.filename}.mp3',
+            "FILE_CONTENT": base64.b64encode(self.file.file.read()),
+        })
 
     def wav_maker_n_messages(self, but):
         ne_path = os.path.join(settings.BASE_DIR, "media", self.inner_media_path, self.filename).replace(r"\\", "/")

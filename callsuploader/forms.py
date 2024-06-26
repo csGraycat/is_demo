@@ -18,7 +18,7 @@ class CallInfoForm(forms.ModelForm):
         self.fields['call_date'].label = 'Дата/время звонка'
         self.fields['type'].label = 'Тип звонка'
         self.fields['add_to_chat'].label = 'Уведомление сотрудника Б24'
-        self.fields['vote'].label = 'Оцените звонок'
+        self.fields['vote'].label = 'Оценка звонка'
         self.fields['file'].label = 'Файл с записью звонка (.mp3)'
         self.fields['call_date'].widget = DateInput(
             attrs={'type': 'datetime-local'})

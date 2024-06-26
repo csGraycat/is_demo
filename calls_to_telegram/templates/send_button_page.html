@@ -51,7 +51,7 @@
         .inactive {
             background-color: #c9b7ab;
         }
-        #exportButton, #syncButton, #stopSyncButton {
+        #exportButton, #exportAllButton, #syncButton, #stopSyncButton {
             width: 100%;
         }
         .fixed-button {
@@ -77,15 +77,17 @@
         <label for="calls_chat_id">Chat ID</label>
         <input type="text" name="calls_chat_id" id="calls_chat_id" required>
         <br>
-        <input type="button" id="exportButton" class="start-active" value="Экспортировать все звонки с портала">
-        <input type="button" id="syncButton" class="start-active" value="Включить синхронизацию звонков">
-        <input type="button" id="stopSyncButton" class="inactive" value="Остановить синхронизацию звонков">
+        <input type="button" id="exportButton" class="start-active" value="Экспортировать аудио-файлы звонков">
+        <input type="button" id="exportAllButton" class="start-active" value="Экспортировать информацию о всех звонках">
+        <input type="button" id="syncButton" class="start-active" value="Включить авто-экспорт звонков">
+        <input type="button" id="stopSyncButton" class="inactive" value="Остановить авто-экспорт звонков">
     </form>
     <button class="fixed-button" onclick="goBack()">Назад</button>
 </body>
     <script type="application/json" id="app-urls">
         {
             "exportCallsUrl": "{% url 'export_calls' %}",
+            "exportAllUrl": "{% url 'export_all_calls' %}",
             "keepSyncedUrl": "{% url 'keep_synced' %}",
             "setFlagUrl": "{% url 'set_call_sync_flag' %}",
             "getFlagUrl": "{% url 'get_call_sync_flag' %}"

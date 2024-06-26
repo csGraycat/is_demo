@@ -1,6 +1,7 @@
 import { exportCalls, initiateSyncLoop, getCurrentFlagState, setFlagState } from './bitrix_integration.js';
 
 const exportButton = document.getElementById('exportButton');
+const exportAllButton = document.getElementById('exportAllButton');
 const syncButton = document.getElementById('syncButton');
 const stopSyncButton = document.getElementById('stopSyncButton');
 
@@ -10,6 +11,7 @@ let currentFlagState = undefined;
 
 document.addEventListener('DOMContentLoaded', () => {
     exportButton.disabled = true;
+    exportAllButton.disabled = true;
     syncButton.disabled = true;
     stopSyncButton.disabled = true;
     getCurrentFlagState(urls.getFlagUrl)
@@ -29,6 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 exportButton.disabled = false;
                 exportButton.classList.remove('inactive');
                 exportButton.classList.add('start-active');
+            })
+    });
+
+    exportAllButton.addEventListener('click', () => {
+        exportAllButton.disabled = true;
+        exportAllButton.classList.remove('start-active');
+        exportAllButton.classList.add('inactive');
+        exportCalls(urls.exportAllUrl)
+            .then(result => {
+                console.log(result);
+                exportAllButton.disabled = false;
+                exportAllButton.classList.remove('inactive');
+                exportAllButton.classList.add('start-active');
             })
     });
 
@@ -59,11 +74,13 @@ function toggleButtonStates(currentFlagState) {
     console.log(currentFlagState)
     if (currentFlagState === true) {
         exportButton.disabled = true;
+        exportAllButton.disabled = true;
         syncButton.disabled = true;
         stopSyncButton.disabled = false;
 
     } else {
         exportButton.disabled = false;
+        exportAllButton.disabled = false;
         syncButton.disabled = false;
         stopSyncButton.disabled = true;
     }
@@ -80,6 +97,9 @@ function toggleButtonColors(currentFlagState) {
         exportButton.classList.remove('start-active');
         exportButton.classList.add('inactive')
 
+        exportAllButton.classList.remove('start-active');
+        exportAllButton.classList.add('inactive')
+
     } else {
         syncButton.classList.remove('inactive');
         syncButton.classList.add('start-active');
@@ -89,5 +109,8 @@ function toggleButtonColors(currentFlagState) {
 
         exportButton.classList.remove('inactive');
         exportButton.classList.add('start-active');
+
+        exportAllButton.classList.remove('inactive');
+        exportAllButton.classList.add('start-active');
     }
 }
