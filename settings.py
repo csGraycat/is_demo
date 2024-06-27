@@ -7,6 +7,7 @@ ADMINS = (
 )
 
 BASE_DOMAIN = 'https://is_demo.it-solution.ru'
+DOMAIN = "vervet-top-manually.ngrok-free.app"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,6 +20,8 @@ DEBUG = False
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'intern.robot_vacancies',
+    'intern.powerbi',
     'intern.send_msg_tg_bot',
     'intern.openai_voice_recognition',
     'intern.field_sort',

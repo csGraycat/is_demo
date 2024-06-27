@@ -6,6 +6,7 @@ class CurrencyRobot(BaseRobot):
     CODE = 'currency_robot'
     NAME = 'Робот возвращает текущий курс валюты по ЦБРФ'
     USE_SUBSCRIPTION = True
+    APP_DOMAIN = "vervet-top-manually.ngrok-free.app"
 
     PROPERTIES = {
         'user': {

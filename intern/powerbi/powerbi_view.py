@@ -5,7 +5,7 @@ from integration_utils.its_utils.app_get_params import get_params_from_sources
 
 
 @get_params_from_sources
-def export_deals(request):
+def powerbi_export_deals(request):
     """
     Функция отвечает за сбор данных из битрикса, обработку в нужный вид и
     отправку в PowerBI.
