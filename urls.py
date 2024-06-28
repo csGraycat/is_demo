@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('', start),
     path('intern/', include('intern.urls')),
+    path('company_to_db/', include('company_to_db.urls')),
     path('tasks/', include('tasks.urls')),
     path('ones/', include('ones_fresh_unf_with_b24.urls')),
     path('crmfields/', include('crmfields.urls')),

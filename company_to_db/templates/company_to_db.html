@@ -1,0 +1,29 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Title
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+       <h1>Отображение сущности в базе данных</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    Выберите сущность
+    <form method="POST" action="{% url 'company_to_db' %}">
+        <select name="entity">
+            <option value="lead">Лиды</option>
+            <option value="company">Компании</option>
+            <option value="contact">Контакты</option>
+            <option value="deal">Сделки</option>
+        </select>
+        <button type="submit">Загрузить</button>
+    </form>
+    {% if res %}
+        {{ res }}
+    {% endif %}
+{% endblock %}

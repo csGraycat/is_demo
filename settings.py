@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'deal_for_powerbi',
     'autocomplete_crm_tasks',
     'move_tasks_deadline_js',
+    "company_to_db.apps.CompanyToDbConfig"
 ]
 
 MIDDLEWARE = [
@@ -96,10 +97,11 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'is_demo',
-        'USER': 'is_demo',
-        'PASSWORD': 'password',
+        'NAME': 'foodgram',
+        'USER': 'postgresql',
+        'PASSWORD': '123456',
         'HOST': 'localhost',
+        'PORT': '5432',
     },
 }
 
