@@ -20,6 +20,7 @@ DEBUG = False
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'intern.select_user',
     'intern.move_deadline',
     'intern.robot_vacancies',
     'intern.powerbi',

@@ -1,0 +1,68 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+    Посмотреть информацию о пользователе
+{% endblock %}
+
+{% block header %}
+    <div class="header">
+        <h1>Посмотреть информацию о пользователе</h1>
+        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    
+<table> 
+    <tbody>
+            {% for k, v in user_info.items %}
+            <tr>
+              {% if k == 'NAME' %}
+                  <td>Имя</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'LAST_NAME' %}
+                  <td>Фамилия</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'SECOND_NAME' %}
+                  <td>Отчество</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'EMAIL' %}
+                  <td>Почта</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'DATE_REGISTER' %}
+                  <td>Дата регистрации на портале</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'PERSONAL_BIRTHDAY' %}
+                  {% if v != '' %}
+                    <td>Дата рождения</td>
+                    <td>{{ v }}</td>
+                  {% endif %}
+              {% endif %}
+              {% if k == 'PERSONAL_PHOTO' %}
+                  <td>Фото профиля</td>
+                  <td><img src="{{ v }}"></td>
+              {% endif %}
+              {% if k == 'PERSONAL_MOBILE' %}
+                  <td>Номер мобильного телефона</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'PERSONAL_CITY' %}
+                  <td>Город</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+              {% if k == 'WORK_POSITION' %}
+                  <td>Должность в компании</td>
+                  <td>{{ v }}</td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    
+{% endblock %}
