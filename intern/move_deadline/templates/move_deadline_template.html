@@ -1,0 +1,37 @@
+<style>
+.button_js {
+background-color: blue;
+color: white;
+width: 150px;
+height: 40px;
+margin: 0 auto;
+border-radius: 8px;
+display:block
+}
+</style>
+
+<body>
+
+<script src="//api.bitrix24.com/api/v1/"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
+<script type="module">
+    import dayjs from 'https://cdn.jsdelivr.net/npm/dayjs@1.11.9/+esm'
+</script>
+
+<script>
+function myFunction() {
+   let task_id = document.getElementById("myButton").value;
+   BX24.callMethod("tasks.task.get", {'taskId': task_id, 'fields': ["DEADLINE"]}, function (res){
+       let deadline = dayjs(res.answer.result.task['deadline']).add(1, 'day').format('DD.MM.YYYY HH:mm');
+       BX24.callMethod("tasks.task.update", {'taskId': task_id, 'fields': {"DEADLINE": deadline.toString()}});
+   })
+}
+</script>
+
+<button class="button_js" id="myButton" onclick="myFunction()" value="{{ task_id }}">Кнопка для js</button>
+
+<form action="{% url "move_deadline" %}" method="POST">
+    <button class="button_js" type="submit">Передвинуть дедлайн</button>
+</form>
+
+</body>

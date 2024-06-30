@@ -6,6 +6,7 @@ from .field_sort.views.field_sort_view import field_sort
 from .openai_voice_recognition.views.openai_voice_recognition_view import open_ai_get_text
 from . import send_msg_tg_bot
 from .powerbi.powerbi_view import powerbi_export_deals
+from .move_deadline.views.move_deadline_view import move_deadline_js
 
 
 urlpatterns = [
@@ -15,5 +16,6 @@ urlpatterns = [
     path('send_msg_tg_bot/', include('intern.send_msg_tg_bot.urls')),
     path('export_powerbi/', powerbi_export_deals, name='powerbi_export_deals'),
     path('robot/', include('intern.robot_vacancies.urls', namespace='bitrix_robot_vacancies')),
+    path('move_deadline/', include('intern.move_deadline.urls')),
     path('', reload_start, name='reload_start'),
 ]

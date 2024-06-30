@@ -4,7 +4,7 @@ import requests as req
 
 class VacanciesRobot(BaseRobot):
     CODE = 'vacancies_robot'
-    NAME = 'Робот возвращает вакансии компании IT-Солюшнс с hh.ru'
+    NAME = 'Робот возвращает вакансии компании с hh.ru'
     USE_SUBSCRIPTION = True
     APP_DOMAIN = "vervet-top-manually.ngrok-free.app"
 
