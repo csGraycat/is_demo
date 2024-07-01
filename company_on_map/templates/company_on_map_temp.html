@@ -6,18 +6,48 @@
 
 {% block header %}
     <div class="header">
-        <h1>Компании на карт Яндекс</h1>
-        <button onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+        <h1>Компании на карте Яндекс</h1>
     </div>
 {% endblock %}
 
 {% block content %}
     <div id="map" style="width: 600px; height: 400px"></div>
+    {{ chosen_comp }}
 {% endblock %}
 
 {% block scripts %}
     {% load static %}
     <script src="https://api-maps.yandex.ru/2.1/?apikey=0bec9964-3c18-4c20-a49d-4843593e1110&lang=ru_RU" type="text/javascript"></script>
-    <script src="{% static "js/map1.js" %}"></script>
+{#    <script src="{% static "js/map1.js" %}"></script>#}
     <script src="//api.bitrix24.com/api/v1/"></script>
+    <script>
+    ymaps.ready(init);
+    function init(){
+    let myMap = new ymaps.Map("map", {
+                center: [59.94, 30.39],
+                zoom: 10
+            }, {
+            searchControlProvider: 'yandex#search'
+            });
+
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            let companies = JSON.parse(this.responseText);
+
+            for (const comp of Object.values(companies)) {
+                let object = ymaps.geocode(`${comp['addr'][0]['PROVINCE']}, ${comp['addr'][0]['CITY']}, ${comp['addr'][0]['ADDRESS_1']}`)
+                object.then(function (res) {
+                    let coor = res.geoObjects.properties._data.metaDataProperty.GeocoderResponseMetaData.Point.coordinates
+                    myMap.geoObjects.add(new ymaps.Placemark([coor[1], coor[0]], {balloonContent: `<strong>${comp['title']}</strong><br />` + ` ${comp['addr'][0]['ADDRESS_1']}`}, ));
+                })
+            }
+        }
+    };
+
+    req.open("GET", "/company_on_map/companies?id={{ chosen_comp }}");
+    req.send();
+}
+    </script>
 {% endblock %}

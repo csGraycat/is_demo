@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
+</head>
+<style>
+    img {
+      max-height:100px;
+    }
+</style>
+<body>
+<button style="margin-bottom: 5px; float: right" onclick="document.location='{% url 'reload_start'%}'">Назад</button>
+
+<div id="dealGrid" style="height: 100vh; width: 100vw; padding-top: 40px" class="ag-theme-alpine"></div>
+
+<script>
+    const deals = {{ json_deal_list|safe }};
+    let gridOptions = {
+                defaultColDef: {
+                    floatingFilter: true,
+                    resizable: true,
+                    sortable: true,
+                    filter: true,
+                },
+                columnDefs: [
+                    {headerName: "Название", field: "TITLE", rowGroup: false, resizable: true, autoHeight: true,},
+                    {headerName: "Стадия", field: "STAGE", rowGroup: false, resizable: true, autoHeight: true,},
+                    {headerName: "Сумма", field: "PRICE", rowGroup: false, resizable: true, autoHeight: true,},
+                    {headerName: "Кем создана", field: "CREATED_BY", rowGroup: false, resizable: true, autoHeight: true,},
+                    {headerName: "Дата создания", field: "DATE_CREATE", rowGroup: false, resizable: true, autoHeight: true,}
+                    
+                ],
+                rowData: deals,
+                columnTypes: {numberValue: {aggFunc: 'sum'}},
+                sideBar: true,
+                rowGroupPanelShow: "always",
+                onGridReady: function(params) {
+                    params.columnApi.autoSizeAllColumns();
+                }
+        };
+    document.addEventListener("DOMContentLoaded", () => {
+        let gridDiv = document.querySelector("#dealGrid");
+        new agGrid.Grid(gridDiv, gridOptions);
+    });
+
+</script>
+
+
+</body>
+</html>

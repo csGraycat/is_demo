@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from integration_utils.bitrix24.bitrix_user_auth.main_auth import main_auth
-
+import json
+import os
 
 @main_auth(on_cookies=True)
 def companies(request):
@@ -10,6 +11,12 @@ def companies(request):
         "select": ["ID", "TITLE"]
     })
     all_companies = {c["ID"]: c for c in all_companies}
+
+    chosen_comp = ''
+    try:
+        chosen_comp = request.GET['id']
+    except:
+        pass
 
     if len(all_companies) == 0:
         return JsonResponse({})
@@ -21,6 +28,16 @@ def companies(request):
             "ANCHOR_TYPE_ID": "4"
         }
     })
+
+    if chosen_comp:
+        all_addresses = but.call_list_method("crm.address.list", {
+            "order": {"TYPE_ID": "ASC"},
+            "select": ["ADDRESS_1", "CITY", "PROVINCE", "COUNTRY", "ANCHOR_ID"],
+            "filter": {
+                "ANCHOR_TYPE_ID": "4",
+                "ANCHOR_ID": chosen_comp
+            }
+        })
 
     if len(all_addresses) == 0:
         return JsonResponse({})

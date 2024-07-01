@@ -19,5 +19,6 @@ urlpatterns = [
     path('robot/', include('intern.robot_vacancies.urls', namespace='bitrix_robot_vacancies')),
     path('move_deadline/', include('intern.move_deadline.urls')),
     path('select_user/', select_user, name='select_user_intern'),
+    path('ag_grid/', include('intern.ag_grid.urls')),
     path('', reload_start, name='reload_start'),
 ]

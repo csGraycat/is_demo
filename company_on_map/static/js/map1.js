@@ -10,14 +10,14 @@ function init(){
     let req = new XMLHttpRequest();
 
     req.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             let companies = JSON.parse(this.responseText);
 
             for (const comp of Object.values(companies)) {
                 let object = ymaps.geocode(`${comp['addr'][0]['PROVINCE']}, ${comp['addr'][0]['CITY']}, ${comp['addr'][0]['ADDRESS_1']}`)
                 object.then(function (res) {
                     let coor = res.geoObjects.properties._data.metaDataProperty.GeocoderResponseMetaData.Point.coordinates
-                    myMap.geoObjects.add(new ymaps.Placemark([coor[1], coor[0]], {balloonContent: `<strong>${comp['title']}</strong>` + '\n' + `${comp['addr'][0]['PROVINCE']}, ${comp['addr'][0]['ADDRESS_1']}`}, ));
+                    myMap.geoObjects.add(new ymaps.Placemark([coor[1], coor[0]], {balloonContent: `<strong>${comp['title']}</strong>` + `\n` + `${comp['addr'][0]['PROVINCE']}, ${comp['addr'][0]['ADDRESS_1']}`}, ));
                 })
             }
         }
